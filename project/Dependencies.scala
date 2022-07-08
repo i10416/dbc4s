@@ -13,7 +13,7 @@ object Deps {
   val sparkAll = sparkBasic :+ sparkStream
 
   val collectionCompat = Seq(
-    "org.scala-lang.modules" %% "scala-collection-compat" % "2.7.0"
+    "org.scala-lang.modules" %% "scala-collection-compat" % "2.8.0"
   )
   val catsEffect = Def.setting(
     Seq(
