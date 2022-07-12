@@ -42,7 +42,7 @@ val commonSettings = Seq(
       unchecked,
       "-feature"
     ) ++ {
-      if (scalaVersion.value.startsWith("2.12")) Seq("-language:higherKinds")
+      if (scalaVersion.value.startsWith("2.12")) Seq("-language:higherKinds","-Ypartial-unification")
       else Seq.empty
     }
   }
@@ -75,6 +75,7 @@ lazy val pi = project
     dbc4sApiToken := sys.env.get("DBC_TOKEN").getOrElse(""),
     dbc4sHost := sys.env.get("DBC_HOST").getOrElse(""),
     dbc4sJobName := "Example -- calculate Pi",
+    
     libraryDependencies ++= Deps.sparkAll
       .map(_ % "provided") ++ Deps.collectionCompat ++ Deps.catsEffect.value
   )

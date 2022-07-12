@@ -113,8 +113,9 @@ object DBC4sPlugin extends AutoPlugin {
         ),
         Seq.empty
       )
-      val client =
-        new DatabricksClient(DBCConfig(dbc4sApiToken.value, dbc4sHost.value))
+      val conf = DBCConfig.from(dbc4sApiToken.value,dbc4sHost.value)
+      val client = conf.fold(msg => throw new Exception(msg),new DatabricksClient(_))
+      
       val id = client.createJob(payload).unsafeRunSync()
       sbt.Keys.streams.value.log.info(s"Successfully create jar job: $id")
       id
@@ -123,8 +124,8 @@ object DBC4sPlugin extends AutoPlugin {
       val savedLocation =
         dbc4sJobUploadDir.value / assemblyArtifact.value.getName()
 
-      val client =
-        new DatabricksClient(DBCConfig(dbc4sApiToken.value, dbc4sHost.value))
+      val conf = DBCConfig.from(dbc4sApiToken.value,dbc4sHost.value)
+      val client = conf.fold(msg => throw new Exception(msg),new DatabricksClient(_))
       Files[effect.IO]
         .readAll(fs2.io.file.Path.fromNioPath(assemblyArtifact.value.toPath()))
         .through(
