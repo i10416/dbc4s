@@ -12,7 +12,7 @@
 
 example jobs
 - pi: calculate pi
-- streaming-jobs: streaming job
+- todo: streaming-jobs
 
 
 Libraries
@@ -34,6 +34,11 @@ val foo = project
       assembly / mainClass := Some("com.example.App"),
       dbc4sApiToken := "",
       dbc4sHost := "your.cloud.databricks.com",
+      dbc4sJobName := "foo",
+      dbc4sJobWorkers := Some(2),
+      dbc4sJobRuntimeSetting := DBCSparkRuntimeConfig(
+          10,2,false,false,false,false,false,"2.12"
+      ),
     )
 ```
 
@@ -44,3 +49,5 @@ sbt dbc4sJobUpload
 // upload and create jar job
 sbt dbc4sCreateJob
 ```
+
+

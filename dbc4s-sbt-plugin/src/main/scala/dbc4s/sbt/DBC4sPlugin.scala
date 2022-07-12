@@ -14,7 +14,7 @@ import dbc4s.api.jobs.schema.SparkJarTask
 import dbc4s.api.jobs.schema
 import dbc4s.api.clusters.schema.JobCluster
 import dbc4s.api.clusters.schema.NewCluster
-import dbc4s.utils.DBCSparkVersionScheme
+import dbc4s.utils.DBCSparkRuntimeConfig
 import dbc4s.api.operations.schema.Schedule
 import dbc4s.api.common.api.NodeType
 import java.time.Instant
@@ -29,7 +29,7 @@ object DBC4sPlugin extends AutoPlugin {
     lazy val dbc4sHost = settingKey[String]("Databricks host")
     lazy val dbc4sJobName = settingKey[String]("Databricks job name")
     lazy val dbc4sJobRuntimeSetting =
-      settingKey[DBCSparkVersionScheme]("Databricks cluster runtime setting")
+      settingKey[DBCSparkRuntimeConfig]("Databricks cluster runtime setting")
     lazy val dbc4sJobClusterNodeType =
       settingKey[String]("Databricks cluster node type. Default is i3xlarge.")
     lazy val dbc4sJobWorkers = settingKey[Option[Int]]("Number of workers for a job. Default is Some(2)")
@@ -47,7 +47,7 @@ object DBC4sPlugin extends AutoPlugin {
     dbc4sHost := "",
     dbc4sApiToken := "",
     dbc4sJobName := s"dbc4s-job-${Instant.now().getEpochSecond()}",
-    dbc4sJobRuntimeSetting := DBCSparkVersionScheme(
+    dbc4sJobRuntimeSetting := DBCSparkRuntimeConfig(
       10,
       4,
       false,

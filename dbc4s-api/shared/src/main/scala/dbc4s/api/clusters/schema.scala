@@ -1,6 +1,6 @@
 package dbc4s.api.clusters
 
-import dbc4s.utils.DBCSparkVersionScheme
+import dbc4s.utils.DBCSparkRuntimeConfig
 
 package object schema {
 
@@ -23,7 +23,7 @@ package object schema {
     *   driver node type is set as the same value as node_type_id defined above.
     */
   case class NewCluster(
-      spark_version: DBCSparkVersionScheme,
+      spark_version: DBCSparkRuntimeConfig,
       node_type_id: String,
       num_workers: Option[Int] = None,
       driver_node_type_id: Option[String] = None,
@@ -33,7 +33,7 @@ package object schema {
 
   object NewCluster {
     def singleNode(
-        sparkVersion: DBCSparkVersionScheme,
+        sparkVersion: DBCSparkRuntimeConfig,
         nodeTypeId: String,
         autoScale: Option[AutoScale] = None,
         sparkConf: Map[String, String] = Map.empty

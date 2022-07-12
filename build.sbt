@@ -53,7 +53,9 @@ lazy val noPublishSettings = Seq(
   publishLocal := (()),
   publishTo := None
 )
-
+/**
+ * example spark job that calculates approx Pi value. 
+*/
 lazy val pi = project
   .in(file("pi"))
   .settings(commonSettings)
@@ -76,7 +78,9 @@ lazy val pi = project
     libraryDependencies ++= Deps.sparkAll
       .map(_ % "provided") ++ Deps.collectionCompat ++ Deps.catsEffect.value
   )
-
+/**
+ * databricks api types and api client.
+*/
 lazy val dbcapi = crossProject(JVMPlatform, JSPlatform)
   .in(file("dbc4s-api"))
   .settings(commonSettings)

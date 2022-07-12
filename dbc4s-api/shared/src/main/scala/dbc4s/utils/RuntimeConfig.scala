@@ -21,7 +21,7 @@ package dbc4s.utils
   * @see
   *   [[https://docs.databricks.com/dev-tools/api/index.html#runtime-version-strings]]
   */
-case class DBCSparkVersionScheme(
+case class DBCSparkRuntimeConfig(
     dbcRuntimeMajorRelease: Int,
     dbcRuntimeFeatureRelease: Int,
     cpu: Boolean,
