@@ -29,34 +29,32 @@ object DBC4sPlugin extends AutoPlugin {
     lazy val dbc4sApiToken = settingKey[String]("Databricks API Token")
     lazy val dbc4sHost = settingKey[String]("Databricks host")
 
-
-
     // job settings
-    /**
-     * human-readable job name
-    */
+    /** human-readable job name
+      */
     lazy val dbc4sJobName = settingKey[String]("Databricks job name")
-    /**
-     * databricks runtime setting
-     *  
-    */
+
+    /** databricks runtime setting
+      */
     lazy val dbc4sJobRuntimeSetting =
       settingKey[DBCSparkRuntimeConfig]("Databricks cluster runtime setting")
-    /**
-     * cluster node instance setting
-    */
+
+    /** cluster node instance setting
+      */
     lazy val dbc4sJobClusterNodeType =
       settingKey[String]("Databricks cluster node type. Default is i3xlarge.")
-    /**
-     * number of workers for this job
-    */
-    lazy val dbc4sJobWorkers = settingKey[Option[Int]]("Number of workers for a job. Default is Some(2)")
-    /**
-     * where to upload uber jar. Default is /tmp/jobs.
-    */
+
+    /** number of workers for this job
+      */
+    lazy val dbc4sJobWorkers =
+      settingKey[Option[Int]]("Number of workers for a job. Default is Some(2)")
+
+    /** where to upload uber jar. Default is /tmp/jobs.
+      */
     lazy val dbc4sJobUploadDir =
-      settingKey[java.nio.file.Path]("Directory to upload jar. Default is /tmp/jobs")
-    
+      settingKey[java.nio.file.Path](
+        "Directory to upload jar. Default is /tmp/jobs"
+      )
 
     // tasks
     lazy val assemblyArtifact = taskKey[File]("File to be published")
@@ -113,9 +111,15 @@ object DBC4sPlugin extends AutoPlugin {
         ),
         Seq.empty
       )
-      val conf = DBCConfig.from(dbc4sApiToken.value,dbc4sHost.value)
-      val client = conf.fold(msg => throw new Exception(msg),new DatabricksClient(_))
-      
+      val conf = DBCConfig.from(dbc4sApiToken.value, dbc4sHost.value)
+      val client = conf.fold(
+        msg =>
+          throw new Exception(msg.foldLeft("") { case (acc, line) =>
+            acc + "\n" + line
+          }),
+        new DatabricksClient(_)
+      )
+
       val id = client.createJob(payload).unsafeRunSync()
       sbt.Keys.streams.value.log.info(s"Successfully create jar job: $id")
       id
@@ -124,8 +128,14 @@ object DBC4sPlugin extends AutoPlugin {
       val savedLocation =
         dbc4sJobUploadDir.value / assemblyArtifact.value.getName()
 
-      val conf = DBCConfig.from(dbc4sApiToken.value,dbc4sHost.value)
-      val client = conf.fold(msg => throw new Exception(msg),new DatabricksClient(_))
+      val conf = DBCConfig.from(dbc4sApiToken.value, dbc4sHost.value)
+      val client = conf.fold(
+        msg =>
+          throw new Exception(msg.foldLeft("") { case (acc, line) =>
+            acc + "\n" + line
+          }),
+        new DatabricksClient(_)
+      )
       Files[effect.IO]
         .readAll(fs2.io.file.Path.fromNioPath(assemblyArtifact.value.toPath()))
         .through(

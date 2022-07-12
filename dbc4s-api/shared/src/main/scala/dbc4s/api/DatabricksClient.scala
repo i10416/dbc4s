@@ -14,14 +14,25 @@ object DatabricksClient {
   // def load():IO[DatabricksClient] = ???
 }
 
-case class DBCConfig(apiToken: String, host:Host)
+case class DBCConfig(apiToken: String, host: Host)
 
 object DBCConfig {
+  import cats.syntax._
+  import cats.syntax.apply._
+  import cats.implicits._
+  import cats.data.ValidatedNec
 
-  def from(apiToken:String,host:String):Either[String,DBCConfig] = {
-    Host.fromString(host) match {
-      case None =>  Left("token must not be empty")
-      case Some(host) => Right(DBCConfig(apiToken,host))
+  def from(apiToken: String, host: String): ValidatedNec[String, DBCConfig] = {
+    type ValidationResult[T] = ValidatedNec[String, T]
+
+    val apiTokenValidated: ValidationResult[String] =
+      if (apiToken.nonEmpty) apiToken.validNec
+      else "api token must not be empty".invalidNec
+    val hostValidated: ValidationResult[Host] =
+      Host.fromString(host).toValidNec(s"host is invalid: $host")
+
+    apiTokenValidated.product(hostValidated).map { case (token, host) =>
+      DBCConfig(token, host)
     }
   }
 }
