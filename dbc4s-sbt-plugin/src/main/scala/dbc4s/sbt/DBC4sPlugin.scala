@@ -28,13 +28,18 @@ object DBC4sPlugin extends AutoPlugin {
     lazy val dbc4sApiToken = settingKey[String]("Databricks API Token")
     lazy val dbc4sHost = settingKey[String]("Databricks host")
     lazy val dbc4sJobName = settingKey[String]("Databricks job name")
-    lazy val dbc4sUploadDir =
+    lazy val dbc4sJobRuntimeSetting =
+      settingKey[DBCSparkVersionScheme]("Databricks cluster runtime setting")
+    lazy val dbc4sJobClusterNodeType =
+      settingKey[String]("Databricks cluster node type. Default is i3xlarge.")
+    lazy val dbc4sJobWorkers = settingKey[Option[Int]]("Number of workers for a job. Default is Some(2)")
+    lazy val dbc4sJobUploadDir =
       settingKey[java.nio.file.Path]("Directory to upload jar")
     lazy val assemblyArtifact = taskKey[File]("File to be published")
-    lazy val deploy = taskKey[Unit]("deploy databricks jar job")
+    lazy val dbc4sJobDeploy = taskKey[Unit]("deploy databricks jar job")
     lazy val dbc4sJobLibs = taskKey[Seq[Lib]]("Databricks job deps")
     lazy val dbc4sCreateJob = taskKey[Long]("create jar job")
-    lazy val dbc4sUpload =
+    lazy val dbc4sJobUpload =
       taskKey[Lib]("upload uber jar for jar job")
   }
   import autoImport._
@@ -42,12 +47,23 @@ object DBC4sPlugin extends AutoPlugin {
     dbc4sHost := "",
     dbc4sApiToken := "",
     dbc4sJobName := s"dbc4s-job-${Instant.now().getEpochSecond()}",
-    dbc4sUploadDir := java.nio.file.Path.of("/tmp/jobs"),
+    dbc4sJobRuntimeSetting := DBCSparkVersionScheme(
+      10,
+      4,
+      false,
+      false,
+      false,
+      false,
+      false,
+      "2.12"
+    ),
+    dbc4sJobClusterNodeType := NodeType.i3xlarge,
+    dbc4sJobUploadDir := java.nio.file.Path.of("/tmp/jobs"),
     dbc4sJobLibs := Seq(),
     assemblyArtifact := sbtassembly.AssemblyKeys.assembly.value,
     dbc4sCreateJob := {
 
-      val savedLib = dbc4sUpload.value
+      val savedLib = dbc4sJobUpload.value
       val payload = CraeteJobPayload(
         dbc4sJobName.value,
         Seq(
@@ -59,18 +75,9 @@ object DBC4sPlugin extends AutoPlugin {
             ),
             Some(
               NewCluster(
-                DBCSparkVersionScheme(
-                  10,
-                  4,
-                  false,
-                  false,
-                  false,
-                  false,
-                  false,
-                  "2.12"
-                ),
-                NodeType.i3xlarge,
-                Some(2)
+                dbc4sJobRuntimeSetting.value,
+                dbc4sJobClusterNodeType.value,
+                dbc4sJobWorkers.value
               )
             ),
             None
@@ -84,9 +91,9 @@ object DBC4sPlugin extends AutoPlugin {
       sbt.Keys.streams.value.log.info(s"Successfully create jar job: $id")
       id
     },
-    dbc4sUpload := {
+    dbc4sJobUpload := {
       val savedLocation =
-        dbc4sUploadDir.value / assemblyArtifact.value.getName()
+        dbc4sJobUploadDir.value / assemblyArtifact.value.getName()
 
       val client =
         new DatabricksClient(DBCConfig(dbc4sApiToken.value, dbc4sHost.value))
@@ -103,8 +110,8 @@ object DBC4sPlugin extends AutoPlugin {
       sbt.Keys.streams.value.log.info(s"Successfully upload jar at ${jar.jar}")
       jar
     },
-    deploy := {
-      val _ = dbc4sUpload.value
+    dbc4sJobDeploy := {
+      val _ = dbc4sJobUpload.value
     }
   )
 }

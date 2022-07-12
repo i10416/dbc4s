@@ -39,7 +39,7 @@ val foo = project
 
 ```sh
 // upload jar job to databricks
-sbt dbc4sUpload
+sbt dbc4sJobUpload
 
 // upload and create jar job
 sbt dbc4sCreateJob
