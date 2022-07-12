@@ -17,8 +17,5 @@ package object schema {
     val PAUSED = "PAUSED"
     val UNPAUSED = "UNPAUSED"
   }
-  object codec {
-    implicit val emailCodec = deriveCodec[EmailNotifications]
-    implicit val scheduleCodec = deriveCodec[Schedule]
-  }
+  object codec extends CodecCompat
 }

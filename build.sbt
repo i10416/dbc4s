@@ -1,5 +1,6 @@
 val scala212 = "2.12.16"
 val scala213 = "2.13.8"
+
 Global / onChangedBuildSource := ReloadOnSourceChanges
 scalaVersion := scala212
 // val uploadArtifact = TaskKey(...)
@@ -69,8 +70,8 @@ lazy val pi = project
       case PathList("META-INF", xs @ _*) => MergeStrategy.discard
       case x                             => MergeStrategy.first
     },
-    dbc4sApiToken := "",
-    dbc4sHost := "",
+    dbc4sApiToken := sys.env.get("DBC_TOKEN").getOrElse(""),
+    dbc4sHost := sys.env.get("DBC_HOST").getOrElse(""),
     dbc4sJobName := "Example -- calculate Pi",
     libraryDependencies ++= Deps.sparkAll
       .map(_ % "provided") ++ Deps.collectionCompat ++ Deps.catsEffect.value
