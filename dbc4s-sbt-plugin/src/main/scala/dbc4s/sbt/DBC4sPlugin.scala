@@ -68,9 +68,11 @@ object DBC4sPlugin extends AutoPlugin {
   }
   import autoImport._
   override def projectSettings: Seq[Setting[_]] = Seq(
+    // default settings
     dbc4sHost := "",
     dbc4sApiToken := "",
     dbc4sJobName := s"dbc4s-job-${Instant.now().getEpochSecond()}",
+    dbc4sJobWorkers := Some(2),
     dbc4sJobRuntimeSetting := DBCSparkRuntimeConfig(
       10,
       4,
@@ -84,6 +86,8 @@ object DBC4sPlugin extends AutoPlugin {
     dbc4sJobClusterNodeType := NodeType.i3xlarge,
     dbc4sJobUploadDir := java.nio.file.Path.of("/tmp/jobs"),
     dbc4sJobLibs := Seq(),
+
+    // tasks
     assemblyArtifact := sbtassembly.AssemblyKeys.assembly.value,
     dbc4sCreateJob := {
 
