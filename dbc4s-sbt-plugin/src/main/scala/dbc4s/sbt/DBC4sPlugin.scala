@@ -25,16 +25,40 @@ object DBC4sPlugin extends AutoPlugin {
   override def trigger: PluginTrigger = allRequirements
 
   object autoImport {
+    // shared settings
     lazy val dbc4sApiToken = settingKey[String]("Databricks API Token")
     lazy val dbc4sHost = settingKey[String]("Databricks host")
+
+
+
+    // job settings
+    /**
+     * human-readable job name
+    */
     lazy val dbc4sJobName = settingKey[String]("Databricks job name")
+    /**
+     * databricks runtime setting
+     *  
+    */
     lazy val dbc4sJobRuntimeSetting =
       settingKey[DBCSparkRuntimeConfig]("Databricks cluster runtime setting")
+    /**
+     * cluster node instance setting
+    */
     lazy val dbc4sJobClusterNodeType =
       settingKey[String]("Databricks cluster node type. Default is i3xlarge.")
+    /**
+     * number of workers for this job
+    */
     lazy val dbc4sJobWorkers = settingKey[Option[Int]]("Number of workers for a job. Default is Some(2)")
+    /**
+     * where to upload uber jar. Default is /tmp/jobs.
+    */
     lazy val dbc4sJobUploadDir =
-      settingKey[java.nio.file.Path]("Directory to upload jar")
+      settingKey[java.nio.file.Path]("Directory to upload jar. Default is /tmp/jobs")
+    
+
+    // tasks
     lazy val assemblyArtifact = taskKey[File]("File to be published")
     lazy val dbc4sJobDeploy = taskKey[Unit]("deploy databricks jar job")
     lazy val dbc4sJobLibs = taskKey[Seq[Lib]]("Databricks job deps")
