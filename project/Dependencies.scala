@@ -2,7 +2,7 @@ import sbt._
 import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
 import org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._
 object Deps {
-  val sparkVersion = "3.2.1"
+  val sparkVersion = "3.3.0"
   val scalafixVersion = "0.10.1"
   val sparkBasic = Seq(
     "org.apache.spark" %% "spark-core" % sparkVersion,
@@ -20,11 +20,11 @@ object Deps {
       "org.typelevel" %%% "cats-effect" % "3.3.9"
     )
   )
-  //val parserCombinator = Def.setting(
+  // val parserCombinator = Def.setting(
   //  Seq(
   //    "org.scala-lang.modules" %%% "scala-parser-combinators" % "2.1.1"
   //  )
-  //)
+  // )
   val fs2 = Def.setting(
     Seq(
       "co.fs2" %%% "fs2-core" % "3.2.7",
