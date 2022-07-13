@@ -17,14 +17,14 @@ object Deps {
   )
   val catsEffect = Def.setting(
     Seq(
-      "org.typelevel" %%% "cats-effect" % "3.3.9"
+      "org.typelevel" %%% "cats-effect" % "3.3.14"
     )
   )
-  //val parserCombinator = Def.setting(
+  // val parserCombinator = Def.setting(
   //  Seq(
   //    "org.scala-lang.modules" %%% "scala-parser-combinators" % "2.1.1"
   //  )
-  //)
+  // )
   val fs2 = Def.setting(
     Seq(
       "co.fs2" %%% "fs2-core" % "3.2.7",
