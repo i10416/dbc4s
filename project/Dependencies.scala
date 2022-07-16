@@ -2,7 +2,7 @@ import sbt._
 import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
 import org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._
 object Deps {
-  val sparkVersion = "3.2.1"
+  val sparkVersion = "3.2.2"
   val scalafixVersion = "0.10.1"
   val sparkBasic = Seq(
     "org.apache.spark" %% "spark-core" % sparkVersion,
