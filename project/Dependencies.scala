@@ -31,7 +31,7 @@ object Deps {
       "co.fs2" %%% "fs2-io" % "3.2.10"
     )
   )
-  val http4sVersion = "0.23.13"
+  val http4sVersion = "0.23.14"
 
   val http4s = Def.setting(
     Seq(
