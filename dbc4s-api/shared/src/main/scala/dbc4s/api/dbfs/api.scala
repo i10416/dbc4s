@@ -66,7 +66,7 @@ trait API extends DBCClient[IO] {
     fs2.Stream
       .chunk(chunk)
       .through(fs2.text.base64.encode)
-      .evalMap{data =>
+      .evalMap { data =>
         import codec._
         post[AppendChunkRequest, Unit](
           client,

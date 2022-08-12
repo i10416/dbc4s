@@ -42,7 +42,8 @@ val commonSettings = Seq(
       unchecked,
       "-feature"
     ) ++ {
-      if (scalaVersion.value.startsWith("2.12")) Seq("-language:higherKinds","-Ypartial-unification")
+      if (scalaVersion.value.startsWith("2.12"))
+        Seq("-language:higherKinds", "-Ypartial-unification")
       else Seq.empty
     }
   }
@@ -53,9 +54,9 @@ lazy val noPublishSettings = Seq(
   publishLocal := (()),
   publishTo := None
 )
-/**
- * example spark job that calculates approx Pi value. 
-*/
+
+/** example spark job that calculates approx Pi value.
+  */
 lazy val pi = project
   .in(file("pi"))
   .settings(commonSettings)
@@ -75,13 +76,12 @@ lazy val pi = project
     dbc4sApiToken := sys.env.get("DBC_TOKEN").getOrElse(""),
     dbc4sHost := sys.env.get("DBC_HOST").getOrElse(""),
     dbc4sJobName := "Example -- calculate Pi",
-    
     libraryDependencies ++= Deps.sparkAll
       .map(_ % "provided") ++ Deps.collectionCompat ++ Deps.catsEffect.value
   )
-/**
- * databricks api types and api client.
-*/
+
+/** databricks api types and api client.
+  */
 lazy val dbcapi = crossProject(JVMPlatform, JSPlatform)
   .in(file("dbc4s-api"))
   .settings(commonSettings)
@@ -92,7 +92,7 @@ lazy val dbcapi = crossProject(JVMPlatform, JSPlatform)
       "--add-opens=java.base/sun.nio.ch=ALL-UNNAMED",
       "--add-opens=java.base/sun.security.action=ALL-UNNAMED"
     ),
-    libraryDependencies ++= Deps.catsEffect.value ++ Deps.fs2.value ++ Deps.http4s.value// ++ Deps.parserCombinator.value
+    libraryDependencies ++= Deps.catsEffect.value ++ Deps.fs2.value ++ Deps.http4s.value // ++ Deps.parserCombinator.value
   )
 lazy val dbc4sPlugin = project
   .in(file("dbc4s-sbt-plugin"))
