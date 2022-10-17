@@ -100,7 +100,7 @@ lazy val dbc4sPlugin = project
   .settings(commonSettings)
   .settings(
     name := "dbc4s-sbt",
-    addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "1.2.0"),
+    addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "2.0.0"),
     sbtPlugin := true
   )
   .dependsOn(dbcapi.jvm)
