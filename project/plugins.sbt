@@ -6,5 +6,5 @@ addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "1.2.0")
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % "1.12.0")
 addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "1.2.0")
 addSbtPlugin("dev.i10416" %% "dbc4s-sbt" % dbc4sVersion)
-addSbtPlugin("com.github.sbt" % "sbt-ci-release" % "1.5.11")
+addSbtPlugin("com.github.sbt" % "sbt-ci-release" % "1.5.10")
 libraryDependencies += "dev.i10416" %% "dbc4s-api" % dbc4sVersion
