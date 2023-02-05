@@ -59,8 +59,9 @@ object DBC4sPlugin extends AutoPlugin {
     // tasks
     lazy val assemblyArtifact = taskKey[File]("File to be published")
     lazy val dbc4sJobDeploy = taskKey[Unit]("deploy databricks jar job")
-    lazy val dbc4sJobLibs = taskKey[Seq[Lib]]("Databricks job deps")
+    lazy val dbc4sJobLibs = taskKey[Seq[Lib]]("Databricks job dependencies")
     lazy val dbc4sCreateJob = taskKey[Long]("create jar job")
+    lazy val dbc4sUploadLib = taskKey[Unit]("upload jvm lib")
     lazy val dbc4sJobUpload =
       taskKey[Lib]("upload uber jar for jar job")
   }
