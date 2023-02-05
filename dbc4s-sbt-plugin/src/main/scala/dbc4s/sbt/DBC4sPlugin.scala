@@ -55,13 +55,16 @@ object DBC4sPlugin extends AutoPlugin {
       settingKey[java.nio.file.Path](
         "Directory to upload jar. Default is /tmp/jobs"
       )
+    lazy val dbc4sLibUploadDir = settingKey[java.nio.file.Path](
+      "Directory to upload lib jar. Default is /tmp/libs"
+    )
 
     // tasks
     lazy val assemblyArtifact = taskKey[File]("File to be published")
     lazy val dbc4sJobDeploy = taskKey[Unit]("deploy databricks jar job")
     lazy val dbc4sJobLibs = taskKey[Seq[Lib]]("Databricks job dependencies")
     lazy val dbc4sCreateJob = taskKey[Long]("create jar job")
-    lazy val dbc4sUploadLib = taskKey[Unit]("upload jvm lib")
+    lazy val dbc4sLibUpload = taskKey[Lib]("upload jvm lib")
     lazy val dbc4sJobUpload =
       taskKey[Lib]("upload uber jar for jar job")
   }
@@ -84,6 +87,7 @@ object DBC4sPlugin extends AutoPlugin {
     ),
     dbc4sJobClusterNodeType := NodeType.i3xlarge,
     dbc4sJobUploadDir := java.nio.file.Path.of("/tmp/jobs"),
+    dbc4sLibUploadDir := java.nio.file.Path.of("/tmp/libs"),
     dbc4sJobLibs := Seq(),
 
     // tasks
@@ -124,6 +128,30 @@ object DBC4sPlugin extends AutoPlugin {
       val id = client.createJob(payload).unsafeRunSync()
       sbt.Keys.streams.value.log.info(s"Successfully create jar job: $id")
       id
+    },
+    dbc4sLibUpload := {
+      val _ = (Compile / sbt.Keys.`package`).value
+      val jarLoc = (Compile / packageBin / artifactPath).value
+      val savedLocation = dbc4sLibUploadDir.value / jarLoc.getName()
+      val conf = DBCConfig.from(dbc4sApiToken.value, dbc4sHost.value)
+      val client = conf.fold(
+        msg =>
+          throw new Exception(msg.foldLeft("") { case (acc, line) =>
+            acc + "\n" + line
+          }),
+        new DatabricksClient(_)
+      )
+      Files[effect.IO]
+        .readAll(fs2.io.file.Path.fromNioPath(jarLoc.toPath()))
+        .through(
+          client.upload(s"dbfs:$savedLocation")
+        )
+        .compile
+        .drain
+        .as(effect.ExitCode.Success)
+        .unsafeRunSync()
+      val jar = schema.Jar(jar = "dbfs:$savedLocation")
+      jar
     },
     dbc4sJobUpload := {
       val savedLocation =
