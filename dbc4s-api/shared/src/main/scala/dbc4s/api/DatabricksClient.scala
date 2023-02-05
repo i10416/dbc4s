@@ -31,7 +31,7 @@ object DBCConfig {
     val hostValidated: ValidationResult[Host] =
       Host.fromString(host).toValidNec(s"host is invalid: $host")
 
-    apiTokenValidated.product(hostValidated).map { case (token, host) =>
+    apiTokenValidated product hostValidated map { case (token, host) =>
       DBCConfig(token, host)
     }
   }

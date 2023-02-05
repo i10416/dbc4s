@@ -17,7 +17,7 @@ object Deps {
   )
   val catsEffect = Def.setting(
     Seq(
-      "org.typelevel" %%% "cats-effect" % "3.3.14"
+      "org.typelevel" %%% "cats-effect" % "3.4.5"
     )
   )
   // val parserCombinator = Def.setting(

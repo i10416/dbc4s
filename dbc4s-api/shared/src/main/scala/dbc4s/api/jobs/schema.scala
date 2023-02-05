@@ -76,6 +76,5 @@ package object schema {
     implicit val tjp = deriveEncoder[CraeteJobPayload]
     implicit val tjpEntity = jsonEncoderOf[IO, CraeteJobPayload]
     implicit val tjrEntity = jsonOf[IO, CreateJobResponse]
-
   }
 }

@@ -28,10 +28,12 @@ package object schema {
       num_workers: Option[Int] = None,
       driver_node_type_id: Option[String] = None,
       auto_scale: Option[AutoScale] = None,
-      spark_conf: Map[String, String] = Map.empty
+      spark_conf: Map[String, String] = Map.empty,
+      spark_env_vars: Map[String,String] = Map.empty
   )
 
   object NewCluster {
+    val jvm11plus = "JNAME=zulu11-ca-amd64"
     def singleNode(
         sparkVersion: DBCSparkRuntimeConfig,
         nodeTypeId: String,
