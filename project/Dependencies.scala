@@ -3,7 +3,7 @@ import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
 import org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._
 object Deps {
   val sparkVersion = "3.2.1"
-  val scalafixVersion = "0.10.1"
+  val scalafixVersion = "0.10.4"
   val sparkBasic = Seq(
     "org.apache.spark" %% "spark-core" % sparkVersion,
     "org.apache.spark" %% "spark-sql" % sparkVersion
@@ -27,8 +27,8 @@ object Deps {
   // )
   val fs2 = Def.setting(
     Seq(
-      "co.fs2" %%% "fs2-core" % "3.2.12",
-      "co.fs2" %%% "fs2-io" % "3.2.12"
+      "co.fs2" %%% "fs2-core" % "3.2.14",
+      "co.fs2" %%% "fs2-io" % "3.2.14"
     )
   )
   val http4sVersion = "0.23.13"
