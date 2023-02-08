@@ -130,7 +130,7 @@ object DBC4sPlugin extends AutoPlugin {
       id
     },
     dbc4sLibUpload := {
-      val _ = (Compile / sbt.Keys.`package`).value
+      val _ = (Compile / packageBin).value
       val jarLoc = (Compile / packageBin / artifactPath).value
       val savedLocation = dbc4sLibUploadDir.value / jarLoc.getName()
       val conf = DBCConfig.from(dbc4sApiToken.value, dbc4sHost.value)
