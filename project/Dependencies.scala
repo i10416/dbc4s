@@ -2,8 +2,8 @@ import sbt._
 import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
 import org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._
 object Deps {
-  val sparkVersion = "3.2.1"
-  val scalafixVersion = "0.10.4"
+  val sparkVersion = "3.4.1"
+  val scalafixVersion = "0.11.1"
   val sparkBasic = Seq(
     "org.apache.spark" %% "spark-core" % sparkVersion,
     "org.apache.spark" %% "spark-sql" % sparkVersion
@@ -13,11 +13,11 @@ object Deps {
   val sparkAll = sparkBasic :+ sparkStream
 
   val collectionCompat = Seq(
-    "org.scala-lang.modules" %% "scala-collection-compat" % "2.8.1"
+    "org.scala-lang.modules" %% "scala-collection-compat" % "2.11.0"
   )
   val catsEffect = Def.setting(
     Seq(
-      "org.typelevel" %%% "cats-effect" % "3.4.5"
+      "org.typelevel" %%% "cats-effect" % "3.5.2"
     )
   )
   // val parserCombinator = Def.setting(
@@ -27,11 +27,11 @@ object Deps {
   // )
   val fs2 = Def.setting(
     Seq(
-      "co.fs2" %%% "fs2-core" % "3.2.14",
-      "co.fs2" %%% "fs2-io" % "3.2.14"
+      "co.fs2" %%% "fs2-core" % "3.9.3",
+      "co.fs2" %%% "fs2-io" % "3.9.3"
     )
   )
-  val http4sVersion = "0.23.13"
+  val http4sVersion = "0.23.23"
 
   val http4s = Def.setting(
     Seq(
