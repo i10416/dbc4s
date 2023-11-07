@@ -1,5 +1,8 @@
 package dbc4s.api.jobs
 
+import org.http4s.EntityEncoder
+import org.http4s.EntityDecoder
+
 package object schema {
 
   import dbc4s.api.operations.schema._
@@ -61,7 +64,7 @@ package object schema {
     import cats.effect.IO
     import io.circe._
     import dbc4s.api.operations.schema.codec._
-    implicit val libDec = new Encoder[Lib] {
+    implicit val libDec: Encoder[Lib] = new Encoder[Lib] {
       override def apply(a: Lib): Json = a match {
         case Jar(jar) => Json.obj(("jar", Json.fromString(jar)))
       }
@@ -69,12 +72,19 @@ package object schema {
     import dbc4s.api.jobs.schema.codec._
     import dbc4s.api.clusters.schema.codec._
 
-    implicit val sparkJarTaskCodec = deriveCodec[SparkJarTask]
-    implicit val JobTaskSettingCodec = deriveEncoder[JobTaskSetting]
-    implicit val cjr = deriveCodec[CreateJobResponse]
-    implicit val tjr = deriveCodec[TriggerJobResponse]
-    implicit val tjp = deriveEncoder[CraeteJobPayload]
-    implicit val tjpEntity = jsonEncoderOf[IO, CraeteJobPayload]
-    implicit val tjrEntity = jsonOf[IO, CreateJobResponse]
+    implicit val sparkJarTaskCodec: Codec.AsObject[SparkJarTask] =
+      deriveCodec[SparkJarTask]
+    implicit val JobTaskSettingCodec: Encoder.AsObject[JobTaskSetting] =
+      deriveEncoder[JobTaskSetting]
+    implicit val cjr: Codec.AsObject[CreateJobResponse] =
+      deriveCodec[CreateJobResponse]
+    implicit val tjr: Codec.AsObject[TriggerJobResponse] =
+      deriveCodec[TriggerJobResponse]
+    implicit val tjp: Encoder.AsObject[CraeteJobPayload] =
+      deriveEncoder[CraeteJobPayload]
+    implicit val tjpEntity: EntityEncoder[IO, CraeteJobPayload] =
+      jsonEncoderOf[IO, CraeteJobPayload]
+    implicit val tjrEntity: EntityDecoder[IO, CreateJobResponse] =
+      jsonOf[IO, CreateJobResponse]
   }
 }

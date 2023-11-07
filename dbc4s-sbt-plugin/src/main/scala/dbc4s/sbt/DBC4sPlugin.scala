@@ -136,8 +136,8 @@ object DBC4sPlugin extends AutoPlugin {
       val conf = DBCConfig.from(dbc4sApiToken.value, dbc4sHost.value)
       val client = conf.fold(
         msg =>
-          throw new Exception(msg.foldLeft("") { case (acc, line) =>
-            acc + "\n" + line
+          throw new Exception(msg.reduceLeft { case (acc, line) =>
+            acc + System.lineSeparator() + line
           }),
         new DatabricksClient(_)
       )
@@ -150,7 +150,8 @@ object DBC4sPlugin extends AutoPlugin {
         .drain
         .as(effect.ExitCode.Success)
         .unsafeRunSync()
-      val jar = schema.Jar(jar = "dbfs:$savedLocation")
+      val jar = schema.Jar(jar = s"dbfs:$savedLocation")
+      sbt.Keys.streams.value.log.info(s"Successfully upload jar at ${jar.jar}")
       jar
     },
     dbc4sJobUpload := {
