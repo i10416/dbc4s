@@ -45,7 +45,7 @@ abstract class DBCClient[F[_]: Async] {
         for {
           r <- err.as[ErrorResponse]
           _ <- Console.make[F].error(r)
-        } yield new Exception("err")
+        } yield new Exception(s"${r.error_code}: ${r.message}")
       })
   }
 }
